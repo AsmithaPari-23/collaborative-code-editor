@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  /* Cyber Theme Global Color Overrides */
+  --color-slate-950: #0D0D0B; /* Near-black background */
+  --color-slate-900: #191917; /* Darker charcoal */
+  --color-slate-800: #242422; /* Dark charcoal cards */
+  --color-slate-700: #3A3A37; /* Subtle borders */
+  --color-slate-600: #555551;
+  --color-slate-500: #70706B; /* Muted text gray */
+  --color-slate-400: #B5B5B0; /* Secondary text light gray */
+  --color-slate-300: #C7C7C3;
+  --color-slate-200: #DCDCDA;
+  --color-slate-100: #F2F2F2; /* Text white */
+
+  --color-blue-600: #9EEA57;  /* Bright neon green primary */
+  --color-blue-500: #B7FF5A;  /* Bright lime hover */
+  --color-blue-400: #9EEA57;  /* Bright neon green active */
+  --color-blue-300: #B7FF5A;
+  --color-blue-200: #D0FFA2;
+  
+  --color-emerald-500: #9EEA57; /* Typing state and status dot */
+}
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-600/20 font-sans;
+  }
+}
+
+/* Cyber Theme Components */
+.glass-panel {
+  background: #242422; /* Dark charcoal */
+  border: 1px solid #3A3A37; /* Subtle borders */
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+}
+
+.glass-panel-light {
+  background: #191917;
+  border: 1px solid #3A3A37;
+  border-radius: 10px;
+}
+
+.glass-input {
+  background: #0D0D0B; /* Near-black */
+  border: 1px solid #3A3A37; /* Subtle borders */
+  border-radius: 8px;
+  padding: 8px 16px 8px 52px;
+  color: #F2F2F2; /* White text */
+  transition: all 200ms ease;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: #9EEA57; /* Bright neon green border */
+  box-shadow: 0 0 0 2px rgba(158, 234, 87, 0.15);
+}
+
+.glass-btn-primary {
+  background: #9EEA57; /* Bright neon green */
+  color: #0D0D0B; /* Near-black text for contrast */
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 200ms ease;
+  cursor: pointer;
+  border: 1px solid #9EEA57;
+}
+
+.glass-btn-primary:hover:not(:disabled) {
+  background: #B7FF5A; /* Lime */
+  border-color: #B7FF5A;
+  box-shadow: 0 0 12px 0 rgba(183, 255, 90, 0.35);
+}
+
+.glass-btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(158, 234, 87, 0.4);
+}
+
+.glass-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.glass-btn-secondary {
+  background: #6E8455; /* Olive-green surfaces */
+  border: 1px solid #6E8455;
+  color: #F2F2F2; /* White text */
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+
+.glass-btn-secondary:hover:not(:disabled) {
+  background: rgba(110, 132, 85, 0.8);
+  border-color: rgba(110, 132, 85, 0.8);
+  color: #FFFFFF;
+}
+
+.glass-btn-secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(110, 132, 85, 0.3);
+}
+
+.glass-btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.glass-btn-danger {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #FCA5A5;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+
+.glass-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #FECACA;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0D0D0B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3A3A37;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555551;
+}
+
+/* Monaco Remote Cursor Decorations */
+.remote-cursor {
+  width: 2px !important;
+  background-color: #9EEA57; /* neon green */
+}
+
+.remote-cursor-label {
+  background-color: #9EEA57;
+  color: #0D0D0B; /* Dark text for contrast */
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  position: absolute;
+  top: -16px;
+  left: 2px;
+  z-index: 10;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.remote-selection {
+  background-color: rgba(158, 234, 87, 0.12) !important;
+}
