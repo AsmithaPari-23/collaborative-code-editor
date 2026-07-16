@@ -40,10 +40,6 @@ https://collaborative-code-editor-tkfg.onrender.com
 - Enabled seamless multi-user code synchronization.
 - Designed a clean and responsive user interface.
 
-## 📸 Preview
-
-*(Add screenshots here)*
-
 ## 👩‍💻 Author
 
 **Asmitha Pari**
