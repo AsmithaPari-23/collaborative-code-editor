@@ -43,7 +43,19 @@ const io = new Server(server, {
 registerSocketHandlers(io);
 
 // Security Middelewares
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+        "worker-src": ["'self'", "blob:"],
+        "child-src": ["'self'", "blob:"],
+        "img-src": ["'self'", "data:", "https://cdn.jsdelivr.net"],
+      },
+    },
+  })
+);
 
 // Cors setup
 const corsOptions = {
