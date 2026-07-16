@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MonacoEditor from '@monaco-editor/react';
-import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import api from '../services/api';
 import { 
   Folder, Users, MessageSquare, History, Settings, Play, 
-  ArrowLeft, AlertTriangle, Terminal, Cpu, Info, CheckCircle2 
+  ArrowLeft, AlertTriangle, Terminal, Cpu, Info
 } from 'lucide-react';
 
 import FileTree from '../components/FileTree';
@@ -18,7 +17,6 @@ import SettingsPanel from '../components/SettingsPanel';
 const Room = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { socket, isConnected, activeUsers, joinRoom, leaveRoom } = useSocket();
 
   // Room details & Files
@@ -59,7 +57,7 @@ const Room = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   // 1. Initial Room data fetch
-  const fetchRoomData = async () => {
+  const fetchRoomData = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -81,7 +79,7 @@ const Room = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [roomId]);
 
   useEffect(() => {
     fetchRoomData();
@@ -91,10 +89,10 @@ const Room = () => {
     return () => {
       leaveRoom();
     };
-  }, [roomId]);
+  }, [roomId, fetchRoomData, joinRoom, leaveRoom]);
 
   // Sync files list helper
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       const response = await api.get(`/files/room/${roomId}`);
       if (response.data?.success) {
@@ -103,7 +101,7 @@ const Room = () => {
     } catch (err) {
       console.error('Failed to refresh files:', err.message);
     }
-  };
+  }, [roomId]);
 
   const activeFile = files.find((f) => f._id === activeFileId);
 
@@ -280,7 +278,7 @@ const Room = () => {
       await fetchFiles();
     };
 
-    const handleFileRenamed = async (renamedFile) => {
+    const handleFileRenamed = async () => {
       await fetchFiles();
     };
 
@@ -312,7 +310,7 @@ const Room = () => {
       socket.off('file-renamed', handleFileRenamed);
       socket.off('file-deleted', handleFileDeleted);
     };
-  }, [socket, activeFileId, files]);
+  }, [socket, activeFileId, files, fetchFiles]);
 
   // Update editor values when changing files
   const handleSelectFile = (fileId) => {
@@ -330,33 +328,7 @@ const Room = () => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Language update helper (saves to database and updates local UI language)
-  const handleLanguageUpdate = async (newLang) => {
-    if (!activeFileId) return;
-    try {
-      const response = await api.put(`/files/${activeFileId}/rename`, {
-        name: activeFile.name,
-        language: newLang, // wait, our update backend updates schemas
-      });
-      
-      // Let's implement an endpoint helper or directly update state
-      // Since renaming backend does not take language explicitly, let's update language on files database:
-      // Wait, let's check file rename endpoint: it accepts `name` from body.
-      // Let's look at `server/controllers/fileController.js` line 77:
-      // file.name = name;
-      // It does not update language. Let's make sure it does or we update it programmatically!
-      // In Javascript, we can expand rename endpoint to accept language:
-      // Let's edit `server/controllers/fileController.js` to support updating language too!
-      // But wait! We can easily edit the file controller to parse `language` if supplied.
-      // Let's look at line 77 in fileController: we can modify it to:
-      // file.name = name;
-      // if (req.body.language) file.language = req.body.language;
-      // That is extremely easy. Let's do that in a moment.
-      // For now, let's write Room.jsx.
-    } catch (err) {
-      console.error(err);
-    }
-  };
+
 
   // Simple language modifier locally and sync via files list
   const handleUpdateLanguageDirect = async (newLang) => {
@@ -418,6 +390,15 @@ const Room = () => {
       setExecuting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400">
+        <div className="w-8 h-8 border-2 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-3"></div>
+        <p className="text-xs">Loading collaboration workspace...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-slate-950 flex flex-col overflow-hidden">
@@ -538,7 +519,6 @@ const Room = () => {
               onRestoreSuccess={(restoredContent) => {
                 // Update editor value
                 if (editorRef.current) {
-                  isPreventEmitRef.current = true;
                   editorRef.current.setValue(restoredContent);
                 }
               }}

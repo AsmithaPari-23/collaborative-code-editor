@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 
@@ -13,14 +13,15 @@ export const SocketProvider = ({ children }) => {
   const [activeUsers, setActiveUsers] = useState([]);
   const [currentRoomId, setCurrentRoomId] = useState(null);
 
+  const roomIdRef = useRef(null);
+
+  useEffect(() => {
+    roomIdRef.current = currentRoomId;
+  }, [currentRoomId]);
+
   // Connect / Disconnect socket based on user login
   useEffect(() => {
     if (!user) {
-      if (socket) {
-        socket.disconnect();
-        setSocket(null);
-        setIsConnected(false);
-      }
       return;
     }
 
@@ -37,9 +38,9 @@ export const SocketProvider = ({ children }) => {
       console.log('Socket connected:', socketInstance.id);
       
       // If we were previously in a room, re-join on reconnect
-      if (currentRoomId) {
+      if (roomIdRef.current) {
         socketInstance.emit('join-room', {
-          roomId: currentRoomId,
+          roomId: roomIdRef.current,
           userId: user._id,
           username: user.username,
         });
@@ -57,7 +58,7 @@ export const SocketProvider = ({ children }) => {
     });
 
     // Listen to real-time member join events
-    socketInstance.on('user-joined', ({ username, activeUsers: updatedUsers }) => {
+    socketInstance.on('user-joined', ({ activeUsers: updatedUsers }) => {
       setActiveUsers(updatedUsers);
     });
 
@@ -67,7 +68,7 @@ export const SocketProvider = ({ children }) => {
     });
 
     // Listen to user departure events
-    socketInstance.on('user-left', ({ username, activeUsers: updatedUsers }) => {
+    socketInstance.on('user-left', ({ activeUsers: updatedUsers }) => {
       setActiveUsers(updatedUsers);
     });
 
@@ -75,8 +76,10 @@ export const SocketProvider = ({ children }) => {
 
     return () => {
       socketInstance.disconnect();
+      setSocket(null);
+      setIsConnected(false);
     };
-  }, [user, currentRoomId]);
+  }, [user]);
 
   // Join room helper
   const joinRoom = useCallback((roomId) => {

@@ -46,9 +46,13 @@
   background: #0D0D0B; /* Near-black */
   border: 1px solid #3A3A37; /* Subtle borders */
   border-radius: 8px;
-  padding: 8px 16px 8px 52px;
+  padding: 8px 16px;
   color: #F2F2F2; /* White text */
   transition: all 200ms ease;
+}
+
+.glass-input-search {
+  padding-left: 52px;
 }
 
 .glass-input:focus {

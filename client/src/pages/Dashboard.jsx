@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { LogOut, Plus, Search, CheckCircle, XCircle, ArrowRight, Trash2 } from 'lucide-react';
+import { LogOut, Plus, Search, ArrowRight, Trash2 } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -11,24 +11,25 @@ const Dashboard = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [submittedSearch, setSubmittedSearch] = useState('');
   const [filter, setFilter] = useState('all'); // 'all' or 'mine'
-  
+
   // Modals / forms
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newRoomName, setNewRoomName] = useState('');
   const [newRoomDesc, setNewRoomDesc] = useState('');
-  
+
   const [joinRoomId, setJoinRoomId] = useState('');
-  
+
   const [error, setError] = useState('');
   const [modalError, setModalError] = useState('');
 
   // Fetch rooms on load and when filters change
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const response = await api.get(`/rooms?search=${search}&filter=${filter}`);
+      const response = await api.get(`/rooms?search=${submittedSearch}&filter=${filter}`);
       if (response.data?.success) {
         setRooms(response.data.data);
       }
@@ -38,15 +39,15 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, submittedSearch]);
 
   useEffect(() => {
     fetchRooms();
-  }, [filter]);
+  }, [fetchRooms]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchRooms();
+    setSubmittedSearch(search);
   };
 
   const handleCreateRoom = async (e) => {
@@ -145,8 +146,8 @@ const Dashboard = () => {
               <Search className="absolute left-[18px] top-1/2 -translate-y-1/2 text-slate-500" size={16} />
               <input
                 type="text"
-                 placeholder="Search rooms..."
-                className="w-full glass-input text-xs"
+                placeholder="Search rooms..."
+                className="w-full glass-input glass-input-search text-xs"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -159,21 +160,19 @@ const Dashboard = () => {
           <div className="flex gap-2 mt-4">
             <button
               onClick={() => setFilter('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                filter === 'all'
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'all'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white/5 text-slate-400 hover:bg-white/10'
-              }`}
+                }`}
             >
               All Rooms
             </button>
             <button
               onClick={() => setFilter('mine')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                filter === 'mine'
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'mine'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white/5 text-slate-400 hover:bg-white/10'
-              }`}
+                }`}
             >
               My Rooms
             </button>

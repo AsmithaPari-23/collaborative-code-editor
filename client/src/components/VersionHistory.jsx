@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { History, Save, RotateCcw } from 'lucide-react';
 import api from '../services/api';
 
@@ -8,7 +8,7 @@ const VersionHistory = ({ fileId, fileContent, onRestoreSuccess }) => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     if (!fileId) return;
     try {
       setLoading(true);
@@ -23,11 +23,11 @@ const VersionHistory = ({ fileId, fileContent, onRestoreSuccess }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fileId]);
 
   useEffect(() => {
     fetchHistory();
-  }, [fileId]);
+  }, [fetchHistory]);
 
   const handleSaveSnapshot = async () => {
     if (!fileId) return;
@@ -56,7 +56,7 @@ const VersionHistory = ({ fileId, fileContent, onRestoreSuccess }) => {
       setError('');
       const response = await api.post(`/history/restore/${snapshotId}`);
       if (response.data?.success) {
-        const { file, newSnapshot } = response.data.data;
+        const { file } = response.data.data;
         // Notify parent workspace to load new code state
         onRestoreSuccess(file.content);
         // Refresh version list

@@ -1,5 +1,7 @@
 import express from 'express';
 import http from 'http';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -84,6 +86,20 @@ app.use('/api/files', fileRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/execute', executeRoutes);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+  app.get('*', (req, res, next) => {
+    // If it's an api route, let it fall through to notFound/errorHandler
+    if (req.originalUrl.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
+  });
+}
 
 // Error Handling Middlewares
 app.use(notFound);

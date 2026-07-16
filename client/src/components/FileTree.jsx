@@ -161,7 +161,7 @@ const FileTree = ({ files, activeFileId, onSelectFile, roomId, fetchFiles, socke
             <div
               key={file._id}
               onClick={() => !isEditing && onSelectFile(file._id)}
-              className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${
+              className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${
                 isActive
                   ? 'bg-blue-600/10 border border-blue-500/30 text-blue-400'
                   : 'bg-white/0 border border-transparent text-slate-300 hover:bg-white/5 hover:text-slate-200'
