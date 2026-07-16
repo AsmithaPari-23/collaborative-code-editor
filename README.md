@@ -5,9 +5,6 @@ A real-time collaborative code editor that allows multiple users to write and ed
 ## 🌐 Live Demo
 https://collaborative-code-editor-tkfg.onrender.com
 
-## 💻 GitHub Repository
-https://github.com/AsmithaPari-23/collaborative-code-editor
-
 ## ✨ Key Features
 
 - 👥 Real-time collaborative code editing
