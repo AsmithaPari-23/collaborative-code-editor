@@ -1,19 +1,21 @@
 # 🚀 Collaborative Code Editor
 
-A real-time collaborative code editor that allows multiple users to write and edit code simultaneously in a shared workspace. It provides an interactive coding environment for pair programming, interviews, and collaborative learning.
+A real-time collaborative code editor built using the MERN stack and Socket.IO that enables multiple users to write, edit, and collaborate on code simultaneously in shared rooms. The application leverages the Monaco Editor to deliver a VS Code-like coding experience with real-time synchronization, making it ideal for pair programming, coding interviews, team collaboration, and online learning.
 
 ## 🌐 Live Demo
+
 https://collaborative-code-editor-tkfg.onrender.com
 
 ## ✨ Key Features
 
 - 👥 Real-time collaborative code editing
-- 🔗 Shareable room ID for joining sessions
-- ⚡ Instant synchronization using WebSockets
-- 📝 Monaco Editor with syntax highlighting
-- 🌍 Supports multiple users in the same room
-- 📱 Responsive and user-friendly interface
+- 🔗 Create and join coding rooms using unique Room IDs
+- ⚡ Instant code synchronization with Socket.IO
+- 💻 Monaco Editor with VS Code-like interface
+- 🎨 Syntax highlighting and multi-language support
 - 🔄 Live updates without page refresh
+- 📱 Responsive and user-friendly design
+- 🌐 Low-latency WebSocket communication
 
 ## 🛠️ Tech Stack
 
@@ -28,17 +30,19 @@ https://collaborative-code-editor-tkfg.onrender.com
 
 ## 📖 How It Works
 
-1. Create or join a collaboration room.
-2. Share the room ID with others.
-3. Multiple users can edit code simultaneously.
-4. All changes are synchronized instantly across connected users.
+1. Create a new coding room or join an existing one using a Room ID.
+2. Share the Room ID with collaborators.
+3. Multiple users can edit the same code simultaneously.
+4. Socket.IO synchronizes every change in real time across all connected users.
+5. Collaborators experience a smooth, VS Code-like coding environment powered by Monaco Editor.
 
 ## 🎯 Project Highlights
 
-- Built a scalable real-time collaborative coding platform.
-- Implemented low-latency communication using Socket.IO.
-- Enabled seamless multi-user code synchronization.
-- Designed a clean and responsive user interface.
+- Developed a real-time collaborative coding platform using React.js, Node.js, Express.js, and Socket.IO.
+- Integrated Monaco Editor to provide syntax highlighting, intelligent code editing, and support for multiple programming languages.
+- Implemented room-based collaboration with low-latency WebSocket communication for seamless multi-user synchronization.
+- Designed a responsive and intuitive user interface for collaborative programming, coding interviews, and learning sessions.
+- Deployed the application for reliable online access and real-time collaboration.
 
 ## 👩‍💻 Author
 
