@@ -3,6 +3,9 @@ import Message from '../models/Message.js';
 import RoomMember from '../models/RoomMember.js';
 import User from '../models/User.js';
 import logger from '../utils/logger.js';
+import ReplayOperation from '../models/ReplayOperation.js';
+import Version from '../models/Version.js';
+import { getEditSummary } from '../controllers/replayController.js';
 
 // In-memory registry of online room members
 // Format: { [roomId]: { [socketId]: { userId, username, typing: boolean } } }
@@ -12,7 +15,64 @@ const activeRooms = {};
 // Format: { [fileId]: { content, timeoutId } }
 const autoSaveQueue = {};
 
+// In-memory registry of active typing sessions for debounced auto-version creation
+// Format: { [fileId]: { [userId]: { timeoutId, operations: [] } } }
+const userTypingSessions = {};
+
 const DEBOUNCE_DELAY = 3000; // 3 seconds
+
+const handleAutoVersionCreation = async (io, roomId, fileId, userId, username) => {
+  try {
+    const session = userTypingSessions[fileId]?.[userId];
+    if (!session || session.operations.length === 0) return;
+
+    // Fetch operations
+    const ops = await ReplayOperation.find({
+      _id: { $in: session.operations }
+    }).sort({ timestamp: 1 });
+
+    if (ops.length === 0) return;
+
+    let totalText = '';
+    let totalDeleted = 0;
+    const fileName = ops[0].fileName;
+
+    for (const op of ops) {
+      if (op.changes && op.changes.length > 0) {
+        for (const change of op.changes) {
+          if (change.text) totalText += change.text;
+          if (change.rangeLength) totalDeleted += change.rangeLength;
+        }
+      }
+    }
+
+    const summaryText = getEditSummary(totalText, totalDeleted > 0 ? 'deleted' : '');
+
+    const file = await File.findById(fileId);
+    if (!file) return;
+
+    const newVersion = await Version.create({
+      roomId,
+      fileId,
+      userId,
+      username,
+      name: summaryText,
+      description: `Auto-saved during coding session`,
+      snapshotContent: file.content,
+      operationId: ops[ops.length - 1]._id,
+    });
+
+    logger.info(`Auto-generated version checkpoint for user ${username} in file ${fileId}: ${summaryText}`);
+
+    // Emit version-created event to room
+    io.to(roomId).emit('version-created', newVersion);
+
+    // Clear session operations
+    delete userTypingSessions[fileId][userId];
+  } catch (err) {
+    logger.error(`Error in auto-versioning: ${err.message}`);
+  }
+};
 
 export default function registerSocketHandlers(io) {
   io.on('connection', (socket) => {
@@ -63,7 +123,7 @@ export default function registerSocketHandlers(io) {
     });
 
     // 2. Code changes sync
-    socket.on('code-change', ({ roomId, fileId, content, changes }) => {
+    socket.on('code-change', ({ roomId, fileId, content, changes, cursor, selection, fileName }) => {
       if (!roomId || !fileId) return;
 
       // Broadcast changes to other users in the room
@@ -76,6 +136,67 @@ export default function registerSocketHandlers(io) {
 
       // Queue file content for auto-save to MongoDB
       queueAutoSave(fileId, content);
+
+      // Save operation to MongoDB and handle auto-versioning in background
+      if (currentUserId && currentUsername) {
+        const recordOperation = async () => {
+          try {
+            let editType = 'unknown';
+            let summary = '';
+            if (changes && changes.length > 0) {
+              const firstChange = changes[0];
+              if (!firstChange.text && firstChange.rangeLength > 0) {
+                editType = 'delete';
+                summary = 'Deleted code';
+              } else if (firstChange.text && !firstChange.rangeLength) {
+                editType = firstChange.text.length > 1 ? 'paste' : 'insert';
+                summary = firstChange.text;
+              } else if (firstChange.text && firstChange.rangeLength > 0) {
+                editType = 'replace';
+                summary = firstChange.text;
+              }
+            }
+
+            const operation = await ReplayOperation.create({
+              roomId,
+              fileId,
+              userId: currentUserId,
+              username: currentUsername,
+              cursor: cursor || { line: 1, column: 1 },
+              selection: selection || null,
+              fileName: fileName || 'untitled',
+              editType,
+              summary,
+              changes: changes || [],
+            });
+
+            // Update user typing session
+            if (!userTypingSessions[fileId]) {
+              userTypingSessions[fileId] = {};
+            }
+            if (!userTypingSessions[fileId][currentUserId]) {
+              userTypingSessions[fileId][currentUserId] = {
+                operations: [],
+                timeoutId: null,
+              };
+            }
+
+            const session = userTypingSessions[fileId][currentUserId];
+            session.operations.push(operation._id);
+
+            if (session.timeoutId) {
+              clearTimeout(session.timeoutId);
+            }
+
+            session.timeoutId = setTimeout(() => {
+              handleAutoVersionCreation(io, roomId, fileId, currentUserId, currentUsername);
+            }, 10000); // 10s debounce for typing pause
+          } catch (err) {
+            logger.error(`Error saving replay operation: ${err.message}`);
+          }
+        };
+        recordOperation();
+      }
     });
 
     // 3. Live Cursor and Selection synchronizer

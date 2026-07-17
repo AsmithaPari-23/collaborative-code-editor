@@ -75,11 +75,19 @@ export const joinRoom = async (req, res, next) => {
     let membership = await RoomMember.findOne({ roomId, userId: req.user._id });
     if (!membership) {
       // User is joining as collaborator
-      membership = await RoomMember.create({
-        roomId,
-        userId: req.user._id,
-        role: 'collaborator',
-      });
+      try {
+        membership = await RoomMember.create({
+          roomId,
+          userId: req.user._id,
+          role: 'collaborator',
+        });
+      } catch (err) {
+        if (err.code === 11000) {
+          membership = await RoomMember.findOne({ roomId, userId: req.user._id });
+        } else {
+          throw err;
+        }
+      }
     }
 
     // Find first/default file of this room

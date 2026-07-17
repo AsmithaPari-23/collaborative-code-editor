@@ -130,7 +130,7 @@ const FileTree = ({ files, activeFileId, onSelectFile, roomId, fetchFiles, socke
           <input
             type="text"
             placeholder="e.g. index.js"
-            className="flex-1 bg-slate-900/80 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500"
+            className="flex-1 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-blue-500"
             value={newFileName}
             onChange={(e) => setNewFileName(e.target.value)}
             autoFocus
@@ -164,7 +164,7 @@ const FileTree = ({ files, activeFileId, onSelectFile, roomId, fetchFiles, socke
               className={`group flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${
                 isActive
                   ? 'bg-blue-600/10 border border-blue-500/30 text-blue-400'
-                  : 'bg-white/0 border border-transparent text-slate-300 hover:bg-white/5 hover:text-slate-200'
+                  : 'bg-white/0 border border-transparent text-slate-300 hover:bg-slate-600 hover:text-slate-100'
               }`}
             >
               <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -174,7 +174,7 @@ const FileTree = ({ files, activeFileId, onSelectFile, roomId, fetchFiles, socke
                   <div className="flex items-center gap-1 flex-1" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="text"
-                      className="bg-slate-900 border border-white/10 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-blue-500 w-full"
+                      className="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-blue-500 w-full"
                       value={editFileName}
                       onChange={(e) => setEditFileName(e.target.value)}
                       autoFocus

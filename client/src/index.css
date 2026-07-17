@@ -1,53 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  /* Cyber Theme Global Color Overrides */
-  --color-slate-950: #0D0D0B; /* Near-black background */
-  --color-slate-900: #191917; /* Darker charcoal */
-  --color-slate-800: #242422; /* Dark charcoal cards */
-  --color-slate-700: #3A3A37; /* Subtle borders */
-  --color-slate-600: #555551;
-  --color-slate-500: #70706B; /* Muted text gray */
-  --color-slate-400: #B5B5B0; /* Secondary text light gray */
-  --color-slate-300: #C7C7C3;
-  --color-slate-200: #DCDCDA;
-  --color-slate-100: #F2F2F2; /* Text white */
+  /* Premium Dark Cybersecurity Theme Color Mapping */
+  --color-slate-950: #0D0D0B; /* Page Background: Matte near-black */
+  --color-slate-900: #161614; /* Sidebar Background */
+  --color-slate-800: #1B1B19; /* Editor Background */
+  --color-slate-700: #3A3A37; /* Border Color */
+  --color-slate-600: #242422; /* Cards/Panels Background */
+  --color-slate-500: #70706B; /* Muted Text */
+  --color-slate-400: #B5B5B0; /* Secondary Text */
+  --color-slate-100: #F2F2F2; /* Primary Text */
 
-  --color-blue-600: #9EEA57;  /* Bright neon green primary */
-  --color-blue-500: #B7FF5A;  /* Bright lime hover */
-  --color-blue-400: #9EEA57;  /* Bright neon green active */
+  /* Matte olive-green accent mapping to action colors */
+  --color-blue-600: #9EEA57;  /* Primary Accent */
+  --color-blue-500: #B7FF5A;  /* Hover Accent */
+  --color-blue-400: #9EEA57;
   --color-blue-300: #B7FF5A;
-  --color-blue-200: #D0FFA2;
   
-  --color-emerald-500: #9EEA57; /* Typing state and status dot */
+  /* Success status indicators */
+  --color-emerald-500: #8BA86D; /* Success Green */
+  --color-emerald-400: #9EEA57;
 }
 
 @layer base {
   body {
     @apply bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-600/20 font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Matte near-black page with subtle radial olive-green emerging from bottom center */
+    background-image: radial-gradient(circle at bottom center, rgba(139, 168, 109, 0.08) 0%, transparent 60%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 }
 
-/* Cyber Theme Components */
+/* Matte Cybersecurity Panels & Inputs */
 .glass-panel {
   background: #242422; /* Dark charcoal */
-  border: 1px solid #3A3A37; /* Subtle borders */
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
-  border-radius: 12px;
+  border: 1px solid #3A3A37; /* Thin borders */
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.35); /* Shadow */
+  border-radius: 10px;
 }
 
 .glass-panel-light {
-  background: #191917;
+  background: #191917; /* Secondary Background */
   border: 1px solid #3A3A37;
   border-radius: 10px;
 }
 
 .glass-input {
-  background: #0D0D0B; /* Near-black */
-  border: 1px solid #3A3A37; /* Subtle borders */
-  border-radius: 8px;
+  background: #191917; /* Secondary Background */
+  border: 1px solid #3A3A37;
+  border-radius: 10px;
   padding: 8px 16px;
-  color: #F2F2F2; /* White text */
+  color: #F2F2F2; /* Primary Text */
   transition: all 200ms ease;
 }
 
@@ -57,30 +62,29 @@
 
 .glass-input:focus {
   outline: none;
-  border-color: #9EEA57; /* Bright neon green border */
-  box-shadow: 0 0 0 2px rgba(158, 234, 87, 0.15);
+  border-color: #9EEA57; /* Primary Accent */
+  box-shadow: 0 0 0 1px #9EEA57; /* Understated 1px focus halo */
 }
 
+/* Primary Action Buttons */
 .glass-btn-primary {
-  background: #9EEA57; /* Bright neon green */
-  color: #0D0D0B; /* Near-black text for contrast */
+  background: #9EEA57; /* Matte primary green accent */
+  color: #0D0D0B; /* Near-black text for high readability contrast */
   font-weight: 600;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 200ms ease;
   cursor: pointer;
   border: 1px solid #9EEA57;
 }
 
 .glass-btn-primary:hover:not(:disabled) {
-  background: #B7FF5A; /* Lime */
+  background: #B7FF5A; /* Hover Accent */
   border-color: #B7FF5A;
-  box-shadow: 0 0 12px 0 rgba(183, 255, 90, 0.35);
 }
 
 .glass-btn-primary:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(158, 234, 87, 0.4);
 }
 
 .glass-btn-primary:disabled {
@@ -88,26 +92,26 @@
   cursor: not-allowed;
 }
 
+/* Secondary Actions */
 .glass-btn-secondary {
-  background: #6E8455; /* Olive-green surfaces */
-  border: 1px solid #6E8455;
-  color: #F2F2F2; /* White text */
+  background: #242422; /* Dark charcoal */
+  border: 1px solid #3A3A37;
+  color: #B5B5B0; /* Secondary Text */
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 200ms ease;
   cursor: pointer;
 }
 
 .glass-btn-secondary:hover:not(:disabled) {
-  background: rgba(110, 132, 85, 0.8);
-  border-color: rgba(110, 132, 85, 0.8);
-  color: #FFFFFF;
+  background: #191917;
+  border-color: #70706B;
+  color: #F2F2F2;
 }
 
 .glass-btn-secondary:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(110, 132, 85, 0.3);
 }
 
 .glass-btn-secondary:disabled {
@@ -115,53 +119,55 @@
   cursor: not-allowed;
 }
 
+/* Alert/Danger buttons */
 .glass-btn-danger {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
   color: #FCA5A5;
   font-weight: 500;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 200ms ease;
   cursor: pointer;
 }
 
 .glass-btn-danger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.45);
   color: #FECACA;
 }
 
-/* Custom Scrollbar */
+/* VS Code Style Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D0D0B;
+  background: #161614; /* Sidebar background color */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3A3A37;
-  border-radius: 9999px;
+  background: #3A3A37; /* Subtle border color */
+  border-radius: 5px;
+  border: 2px solid #161614;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555551;
+  background: #70706B; /* Muted label color */
 }
 
 /* Monaco Remote Cursor Decorations */
 .remote-cursor {
   width: 2px !important;
-  background-color: #9EEA57; /* neon green */
+  background-color: #9EEA57; /* Accent cursor */
 }
 
 .remote-cursor-label {
   background-color: #9EEA57;
-  color: #0D0D0B; /* Dark text for contrast */
-  font-family: 'Poppins', sans-serif;
-  font-size: 9px;
+  color: #0D0D0B;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
   font-weight: 600;
   padding: 1px 4px;
   border-radius: 3px;
@@ -170,10 +176,79 @@
   top: -16px;
   left: 2px;
   z-index: 10;
-  opacity: 0.9;
+  opacity: 0.95;
   pointer-events: none;
 }
 
 .remote-selection {
-  background-color: rgba(158, 234, 87, 0.12) !important;
+  background-color: rgba(158, 234, 87, 0.12) !important; /* Muted green highlight */
+}
+
+/* Predefined Premium Muted User Colors (No purple or bright blue) */
+.remote-cursor-violet { background-color: #8BA86D !important; }
+.remote-cursor-label-violet { background-color: #8BA86D !important; color: #0D0D0B !important; }
+.remote-selection-violet { background-color: rgba(139, 168, 109, 0.12) !important; }
+.replay-typing-highlight-violet { background-color: rgba(139, 168, 109, 0.20) !important; }
+
+.remote-cursor-pink { background-color: #A3B18A !important; }
+.remote-cursor-label-pink { background-color: #A3B18A !important; color: #0D0D0B !important; }
+.remote-selection-pink { background-color: rgba(163, 177, 138, 0.12) !important; }
+.replay-typing-highlight-pink { background-color: rgba(163, 177, 138, 0.20) !important; }
+
+.remote-cursor-blue { background-color: #8FBC8F !important; }
+.remote-cursor-label-blue { background-color: #8FBC8F !important; color: #0D0D0B !important; }
+.remote-selection-blue { background-color: rgba(143, 188, 143, 0.12) !important; }
+.replay-typing-highlight-blue { background-color: rgba(143, 188, 143, 0.20) !important; }
+
+.remote-cursor-amber { background-color: #D4A373 !important; }
+.remote-cursor-label-amber { background-color: #D4A373 !important; color: #0D0D0B !important; }
+.remote-selection-amber { background-color: rgba(212, 163, 115, 0.12) !important; }
+.replay-typing-highlight-amber { background-color: rgba(212, 163, 115, 0.20) !important; }
+
+.remote-cursor-emerald { background-color: #556B2F !important; }
+.remote-cursor-label-emerald { background-color: #556B2F !important; color: #F2F2F2 !important; }
+.remote-selection-emerald { background-color: rgba(85, 107, 47, 0.12) !important; }
+.replay-typing-highlight-emerald { background-color: rgba(85, 107, 47, 0.20) !important; }
+
+.remote-cursor-red { background-color: #E07A5F !important; }
+.remote-cursor-label-red { background-color: #E07A5F !important; color: #0D0D0B !important; }
+.remote-selection-red { background-color: rgba(224, 122, 95, 0.12) !important; }
+.replay-typing-highlight-red { background-color: rgba(224, 122, 95, 0.20) !important; }
+
+.remote-cursor-cyan { background-color: #6B705C !important; }
+.remote-cursor-label-cyan { background-color: #6B705C !important; color: #F2F2F2 !important; }
+.remote-selection-cyan { background-color: rgba(107, 112, 92, 0.12) !important; }
+.replay-typing-highlight-cyan { background-color: rgba(107, 112, 92, 0.20) !important; }
+
+.remote-cursor-orange { background-color: #BC6C25 !important; }
+.remote-cursor-label-orange { background-color: #BC6C25 !important; color: #F2F2F2 !important; }
+.remote-selection-orange { background-color: rgba(188, 108, 37, 0.12) !important; }
+.replay-typing-highlight-orange { background-color: rgba(188, 108, 37, 0.20) !important; }
+
+.remote-cursor-lime { background-color: #9EEA57 !important; }
+.remote-cursor-label-lime { background-color: #9EEA57 !important; color: #0D0D0B !important; }
+.remote-selection-lime { background-color: rgba(158, 234, 87, 0.12) !important; }
+.replay-typing-highlight-lime { background-color: rgba(158, 234, 87, 0.20) !important; }
+
+/* Custom Monaco Diff Overrides */
+/* Highlight added lines in blue */
+.monaco-editor .line-insert,
+.monaco-editor .char-insert {
+  background-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Highlight deleted lines in red */
+.monaco-editor .line-delete,
+.monaco-editor .char-delete {
+  background-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+/* Highlight modified lines in yellow */
+.monaco-editor .line-modified {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Replay Highlight styling */
+.replay-new-text-highlight {
+  transition: background-color 0.5s ease-out;
 }

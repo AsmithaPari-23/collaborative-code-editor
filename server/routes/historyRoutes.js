@@ -1,17 +1,20 @@
 import express from 'express';
 import {
-  createSnapshot,
-  getFileHistory,
+  getReplayOperations,
+  getVersions,
+  createManualVersion,
   restoreVersion,
-} from '../controllers/historyController.js';
+} from '../controllers/replayController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.use(protect); // Secure all history routes
 
-router.post('/', createSnapshot);
-router.get('/file/:fileId', getFileHistory);
-router.post('/restore/:historyId', restoreVersion);
+router.post('/', createManualVersion);
+router.get('/file/:fileId', getVersions);
+router.get('/versions/:fileId', getVersions);
+router.get('/replays/:fileId', getReplayOperations);
+router.post('/restore/:versionId', restoreVersion);
 
 export default router;

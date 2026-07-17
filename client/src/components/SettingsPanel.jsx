@@ -13,7 +13,7 @@ const LANGUAGES = [
 ];
 
 const THEMES = [
-  { value: 'vs-dark', label: 'VS Dark (Default)' },
+  { value: 'premium-dark', label: 'Matte Dark (Default)' },
   { value: 'light', label: 'VS Light' },
 ];
 

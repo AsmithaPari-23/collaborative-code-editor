@@ -13,15 +13,15 @@ const UsersPanel = ({ activeUsers, roomId, isConnected }) => {
   return (
     <div className="flex flex-col h-full">
       {/* Room ID Copy Panel */}
-      <div className="mb-6 p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-2">
-        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+      <div className="mb-6 p-4 rounded-xl bg-slate-600 border border-slate-700 flex flex-col gap-2">
+        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
           Collaboration Room ID
         </span>
         <div className="flex items-center justify-between gap-2">
-          <code className="text-xs text-blue-400 select-all truncate">{roomId}</code>
+          <code className="text-xs text-emerald-500 select-all truncate">{roomId}</code>
           <button
             onClick={copyRoomId}
-            className="text-slate-400 hover:text-white p-1 hover:bg-white/5 rounded transition-colors shrink-0"
+            className="text-slate-400 hover:text-slate-100 p-1 hover:bg-slate-700 rounded transition-colors shrink-0"
             title="Copy Room ID"
           >
             {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -47,7 +47,7 @@ const UsersPanel = ({ activeUsers, roomId, isConnected }) => {
         {activeUsers.map((user, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/40 border border-white/5"
+            className="flex items-center justify-between p-2.5 rounded-lg bg-slate-600 border border-slate-700"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               {/* Simple Avatar */}
@@ -57,12 +57,12 @@ const UsersPanel = ({ activeUsers, roomId, isConnected }) => {
               <div className="min-w-0">
                 <p className="text-xs font-medium text-slate-200 truncate">{user.username}</p>
                 {user.typing && (
-                  <p className="text-[10px] text-blue-400 animate-pulse font-light">Typing...</p>
+                  <p className="text-[10px] text-emerald-500 animate-pulse font-light">Typing...</p>
                 )}
               </div>
             </div>
 
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
           </div>
         ))}
       </div>

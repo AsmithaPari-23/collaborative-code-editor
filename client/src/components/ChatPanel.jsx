@@ -101,7 +101,7 @@ const ChatPanel = ({ roomId, socket }) => {
                   className={`px-3 py-2 rounded-xl text-xs ${
                     isMe
                       ? 'bg-blue-600 text-white rounded-tr-none'
-                      : 'bg-white/5 border border-white/5 text-slate-200 rounded-tl-none'
+                      : 'bg-slate-600 border border-slate-700 text-slate-200 rounded-tl-none'
                   }`}
                 >
                   <p className="break-words leading-relaxed">{msg.content}</p>

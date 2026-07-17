@@ -116,7 +116,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-slate-950 p-6 md:p-10 flex flex-col">
       {/* Header */}
-      <header className="flex justify-between items-center mb-10 pb-6 border-b border-white/5">
+      <header className="flex justify-between items-center mb-10 pb-6 border-b border-slate-700">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-white">CollabEditor</h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -160,18 +160,18 @@ const Dashboard = () => {
           <div className="flex gap-2 mt-4">
             <button
               onClick={() => setFilter('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white/5 text-slate-400 hover:bg-white/10'
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${filter === 'all'
+                  ? 'bg-blue-600 border-blue-600 text-white'
+                  : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-100'
                 }`}
             >
               All Rooms
             </button>
             <button
               onClick={() => setFilter('mine')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'mine'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white/5 text-slate-400 hover:bg-white/10'
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${filter === 'mine'
+                  ? 'bg-blue-600 border-blue-600 text-white'
+                  : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-100'
                 }`}
             >
               My Rooms
@@ -229,7 +229,7 @@ const Dashboard = () => {
             <p className="text-xs">Loading rooms...</p>
           </div>
         ) : rooms.length === 0 ? (
-          <div className="h-64 glass-panel rounded-xl flex flex-col items-center justify-center text-slate-400 p-6 text-center border-dashed border-white/5">
+          <div className="h-64 glass-panel rounded-xl flex flex-col items-center justify-center text-slate-400 p-6 text-center border-dashed border-slate-700">
             <p className="text-sm font-medium mb-1">No rooms found</p>
             <p className="text-xs text-slate-500 max-w-xs">
               Try search keywords or create a new room to begin code sharing.
@@ -243,7 +243,7 @@ const Dashboard = () => {
                 <div
                   key={room._id}
                   onClick={() => navigate(`/room/${room._id}`)}
-                  className="glass-panel rounded-xl p-5 hover:border-slate-700 cursor-pointer transition-all duration-200 flex flex-col justify-between group h-44 shadow-lg shadow-black/10"
+                  className="glass-panel rounded-xl p-5 hover:border-blue-600 cursor-pointer transition-all duration-200 flex flex-col justify-between group h-44 shadow-lg shadow-black/10"
                 >
                   <div>
                     <div className="flex justify-between items-start mb-2">
@@ -265,7 +265,7 @@ const Dashboard = () => {
                     </p>
                   </div>
 
-                  <div className="border-t border-white/5 pt-3 flex justify-between items-center text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+                  <div className="border-t border-slate-700 pt-3 flex justify-between items-center text-[10px] text-slate-500 font-medium uppercase tracking-wider">
                     <span>By: {room.ownerId?.username || 'Unknown'}</span>
                     <span className="text-slate-500">ID: {room._id}</span>
                   </div>
